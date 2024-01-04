@@ -16,10 +16,7 @@ jobs:
       run : npm i -f
       shell: bash
     - name : Build react app...
-      run : npm run build
-      shell: bash
-    - name : Bump minor version...
-      run : npm version minor
+      run : CI=false npm run build
       shell: bash
     - name : Add changes from the working tree...
       run : git --work-tree build add --all
