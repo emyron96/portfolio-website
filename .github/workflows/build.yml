@@ -8,6 +8,24 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Build & Deploy React app to GitHub Pages
-      uses: MrKrishnaAgarwal/deploy-react-app-to-gh-pages@v1.0.0
+    - name : Configure git username and email...
+      run : git config user.name github-actions && git config user.email github-actions@github.com
+      shell: bash
+    - name : Install dependencies...
+      run : npm i -f
+      shell: bash
+    - name : Build react app...
+      run : npm run build
+      shell: bash
+    - name : Bump minor version...
+      run : npm version minor
+      shell: bash
+    - name : Add changes from the working tree...
+      run : git --work-tree build add --all
+      shell: bash
+    - name : Committ changes...
+      run : git commit -m "Automatically deploying v$(npm version | grep 'site' | grep -E -o "[0-9]+\.[0-9]+\.[0-9]+[^']*")"
+      shell: bash
+    - name : Push changes to gh-pages branch...
+      run : git push origin HEAD:gh-pages --force
+      shell: bash
